@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Image.h"
 #include "Engine/SceneCapture2D.h"
+#include <Components/CanvasPanel.h>
 #include "SC2D.generated.h"
 
 /**
@@ -21,6 +22,8 @@ public:
 
 	virtual void NativeConstruct() override;
 
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
 	USceneCaptureComponent2D* m_captureComponent;
 
 	UFUNCTION(BlueprintCallable, Category = "USC2D")
@@ -28,13 +31,23 @@ public:
 
 	void CaptureComponent2D_DeProject(USceneCaptureComponent2D* Target, const FVector2D& ScreenPos, FVector& OutWorldOrigin, FVector& OutWorldDirection);
 
+	bool CaptureComponent2D_Project(USceneCaptureComponent2D* Target, const FVector& WorldLocation, FVector2D& OutScreenPos);
+
 private:
 
-	UPROPERTY(EditAnywhere, Category = "USC2D")
-	TSubclassOf<AActor> BP_CubeClass;
+	/*UPROPERTY(EditAnywhere, Category = "USC2D")
+	TSubclassOf<AActor> BP_CubeClass;*/
 
 	UPROPERTY(meta = (BindWidget))
 	UImage* m_image;
 
 	UTextureRenderTarget2D* m_renderTarget;
+
+	UPROPERTY(meta = (BindWidget))
+	UCanvasPanel* m_canvasPanel;
+
+	TSubclassOf<UUserWidget> m_tempFollowUI;
+	UUserWidget* m_followUI;
+
+	AActor* m_actor;
 };
